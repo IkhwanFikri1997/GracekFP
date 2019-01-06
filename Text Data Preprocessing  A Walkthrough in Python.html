@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head profile="http://gmpg.org/xfn/11">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name=viewport content="width=device-width, initial-scale=1">
+    <title>  Text Data Preprocessing: A Walkthrough in Python</title>
+  <link rel="shortcut icon" href="/wp-content/themes/kdn17/images/favicon.ico" />
+  <link type="text/css" rel="stylesheet" href="/wp-content/themes/kdn17/style.css" media="screen" />
+  <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/87F4CD5B-CA06-2748-8DDC-64D977D572AE/main.js" charset="UTF-8"></script><script type="text/javascript" src="/wp-content/themes/kdn17/js/jquery-1.9.1.min.js" ></script>
+  <script type="text/javascript" src="/aps/kda_all.js"></script> 
+  <link rel="alternate" type="application/rss+xml" title="KDnuggets: Analytics, Big Data, Data Mining and Data Science Feed" href="/feed/" />
+ <link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="KDnuggets &raquo; Feed" href="https://www.kdnuggets.com/feed" />
+<link rel="alternate" type="application/rss+xml" title="KDnuggets &raquo; Comments Feed" href="https://www.kdnuggets.com/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="KDnuggets &raquo; Text Data Preprocessing: A Walkthrough in Python Comments Feed" href="https://www.kdnuggets.com/2018/03/text-data-preprocessing-walkthrough-python.html/feed" />
+<link rel='https://api.w.org/' href='https://www.kdnuggets.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.kdnuggets.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://www.kdnuggets.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='New KDnuggets Poll: Where did you apply Analytics, Data Science, Machine Learning methods in 2017?' href='https://www.kdnuggets.com/2018/03/new-poll-where-applied-analytics-data-science.html' />
+<link rel='next' title='Comparing Deep Learning Frameworks: A Rosetta Stone Approach' href='https://www.kdnuggets.com/2018/03/deep-learning-frameworks.html' />
+<meta name="generator" content="WordPress 4.9.9" />
+<link rel="canonical" href="https://www.kdnuggets.com/2018/03/text-data-preprocessing-walkthrough-python.html" />
+<link rel='shortlink' href='https://www.kdnuggets.com/?p=79318' />
+	<link rel="canonical" href="https://www.kdnuggets.com/2018/03/text-data-preprocessing-walkthrough-python.html"/>
+
+
+<!-- BEGIN GADWP v4.9.5 Classic Tracking - https://deconf.com/google-analytics-dashboard-wordpress/ -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-361129-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<!-- END GADWP Classic Tracking -->
+
+</head>
+ 
+<body class="post-template-default single single-post postid-79318 single-format-standard">
+  <div class="main_wrapper"><!-- publ: 26-Mar, 2018  -->
+    <div id="wrapper">
+      <div id="header">
+        <div id="header_log">
+          <div class="logo">
+            <a href="/"></a>
+           </div>
+           <h1>KDnuggets</h1>
+           <div class="text-container">
+            &nbsp;&nbsp;<a href="/news/subscribe.html" target="_blank"><b>Subscribe to KDnuggets News</b></a> &nbsp;|
+ <a href="https://twitter.com/kdnuggets" target="_blank"><img src="/images/tw_c48.png" width=48 height=48 style="vertical-align: bottom" alt="Twitter"></a> &nbsp;&nbsp;
+ <a href="https://www.facebook.com/kdnuggets" target="_blank"><img src="/images/fb_c48.png" width=48 height=48 style="vertical-align: bottom" alt="Facebook"></a> &nbsp;&nbsp;
+<a href="https://www.linkedin.com/groups/54257/" target="_blank"><img src="/images/in_c48.png" width=48 height=48 style="vertical-align: bottom" alt="LinkedIn"></a> 
+&nbsp;|&nbsp; <a href="/contact.html"><b>Contact</b></a>
+            </div>
+          </div>
+        <div class="search">
+          <form method="get" id="searchform" action="/">
+	  <input value="" name="s" id="s" placeholder="search KDnuggets" type="text">
+	  <input value="Search" type="submit"></form>
+        </div>
+<div href="#" id="pull">
+  <img class="menu" src="/images/menu-30.png"/>
+  <div class="logo">
+      <a href="/"></a>
+  </div>
+  <img class="search-icon" src="/images/search-icon.png"/>
+</div>
+<div id="pull-menu">
+  
+        <div class="navigation"><ul id="menu-menu" class="menu"><li id="menu-item-1070" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1070"><a title="Data Science Software" href="/software/index.html">SOFTWARE</a></li>
+<li id="menu-item-13756" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13756"><a title="News" href="/news/index.html">News/Blog</a></li>
+<li id="menu-item-46286" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-46286"><a href="/news/top-stories.html">Top stories</a></li>
+<li id="menu-item-42152" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-42152"><a title="Opinions" href="https://www.kdnuggets.com/opinions/index.html">Opinions</a></li>
+<li id="menu-item-46415" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-46415"><a href="https://www.kdnuggets.com/tutorials/index.html">Tutorials</a></li>
+<li id="menu-item-13364" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13364"><a title="Jobs in Analytics, Data Science" href="/jobs/index.html">JOBS</a></li>
+<li id="menu-item-63505" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-63505"><a href="https://www.kdnuggets.com/companies/index.html">Companies</a></li>
+<li id="menu-item-13366" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13366"><a href="/courses/index.html">Courses</a></li>
+<li id="menu-item-1499" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1499"><a href="https://www.kdnuggets.com/datasets/index.html">Datasets</a></li>
+<li id="menu-item-14286" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-14286"><a title="Education in Analytics, Big Data, Data Science" href="https://www.kdnuggets.com/education/index.html">EDUCATION</a></li>
+<li id="menu-item-51558" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-51558"><a title="Certificates in Analytics, Big Data, Data Science" href="https://www.kdnuggets.com/education/analytics-data-mining-certificates.html">Certificates</a></li>
+<li id="menu-item-14752" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14752"><a href="/meetings/index.html">Meetings</a></li>
+<li id="menu-item-13721" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13721"><a title="Webcasts and Webinars" href="/webcasts/index.html">Webinars</a></li>
+</ul></div></div>
+      </div> <!--#header end-->
+      <div id="spacer">
+         &nbsp;
+      </div>
+	  <div align="center">
+        <em><a href="https://www.linkedin.com/in/gpiatetsky/" target="_blank" onclick="_gaq.push(['_trackPageview','/x/li1f']);"><b>Follow Gregory Piatetsky</b></a>, No. 1 on <a href="https://www.kdnuggets.com/2018/11/linkedin-top-voices-2018-data-science-analytics.html" target="_blank" onclick="_gaq.push(['_trackPageview','/x/li1tv']);"><b>LinkedIn Top Voices</b></a> in Data Science &amp; Analytics</em>
+      </div>
+      <div id="content_wrapper">
+        <div id="ad_wrapper">
+          <script type="text/javascript">
+	jQuery(function() {
+   	    var pull        = $('#pull');
+            menu        = $('#header .navigation ul');
+            menuImage = $('#header img.menu');
+            mobileMenu        = $('#pull-menu-mobile');
+            search = $('img.search-icon');
+            searchBar = $('div.search');
+            searchClick = false;
+            search.on('click', function() {
+                  searchBar.slideToggle();
+                  searchClick = true;
+            });  
+     	    $(menuImage).on('click', function(e) {
+	        //e.preventDefault();
+                if (!searchClick) {
+                  menu.slideToggle();
+                }
+                searchClick = false;
+	    });
+           /* pullMobile.on('click', function(e) {
+              e.preventDefault();
+                if (!searchClick) {
+                  mobileMenu.slideToggle();
+                }
+                searchClick = false;
+	    });*/
+            
+	});
+	kpath = '/'; kda_top(); kda_sid_init(); kda_sid_n=3;
+	</script>
+        </div>    <div class="breadcumb">
+       <br />
+<a href="/">KDnuggets Home</a> &raquo; <a href="/news/index.html">News</a> &raquo; <a href="/2018/index.html">2018</a> &raquo; <a href="https://www.kdnuggets.com/2018/03/index.html">Mar</a> &raquo; <a href="https://www.kdnuggets.com/2018/03/tutorials.html">Tutorials, Overviews</a> &raquo; Text Data Preprocessing: A Walkthrough in Python (&nbsp;<a href="/2018/n13.html">18:n13</a>&nbsp;)    </div>
+
+<div id="content" class="single">
+<div id="post-header">
+  <h1 id="title"><img src="/images/tkb-1803-g.png" width=94 alt="Gold Blog" align="right">Text Data Preprocessing: A Walkthrough in Python</h1>
+
+  <div class="pagi">
+    <div class="pagi-left">
+<a href="https://www.kdnuggets.com/2018/03/new-poll-where-applied-analytics-data-science.html" rel="prev"><img width=8 height=10 src='/images/prv.gif' /> <strong>Previous post</strong></a></div>
+<div  class="pagi-right">
+<a href="https://www.kdnuggets.com/2018/03/deep-learning-frameworks.html" rel="next"><strong>Next post</strong> <img width=8 height=10 src="/images/nxt.gif"/></a></div>
+
+    <br>&nbsp;<br>&nbsp;
+    <div class="addthis_native_toolbox"></div>
+
+
+  </div>
+  <div class="tag-data">Tags: <a href="https://www.kdnuggets.com/tag/data-preparation" rel="tag">Data Preparation</a>, <a href="https://www.kdnuggets.com/tag/data-preprocessing" rel="tag">Data Preprocessing</a>, <a href="https://www.kdnuggets.com/tag/nlp" rel="tag">NLP</a>, <a href="https://www.kdnuggets.com/tag/python" rel="tag">Python</a>, <a href="https://www.kdnuggets.com/tag/text-analytics" rel="tag">Text Analytics</a>, <a href="https://www.kdnuggets.com/tag/text-mining" rel="tag">Text Mining</a></div>
+  <br>
+  <p class="excerpt">
+     This post will serve as a practical walkthrough of a text data preprocessing task using some common Python tools.
+  </p>
+</div>  
+<div id="post-header-ad">
+<script type="text/javascript">kda_sid_write(1); kda_sid_n=2;</script>
+</div>
+  <hr class="grey-line"><br>
+  <div id="post-" class="post-79318 post type-post status-publish format-standard hentry category-h03-tutorials tag-data-preparation tag-data-preprocessing tag-nlp tag-python tag-text-analytics tag-text-mining" class="post">
+   <div class='author-link'><b>By <a href="https://www.kdnuggets.com/author/matt-mayo" title="Posts by Matthew Mayo" rel="author">Matthew Mayo</a>, KDnuggets.</b></div>  
+
+<div align="right"><img src="/images/comment.gif" width=16 height=12 alt="c"> <a href="#comments">comments</a></div>
+<p>In a pair of previous posts, we first discussed a <a href="/2017/11/framework-approaching-textual-data-tasks.html" rel="noopener" target="_blank">framework for approaching textual data science tasks</a>, and followed that up with a discussion on a <a href="/2017/12/general-approach-preprocessing-text-data.html" rel="noopener" target="_blank">general approach to preprocessing text data</a>. This post will serve as a practical walkthrough of a text data preprocessing task using some common Python tools.</p>
+<p><center><img src="/wp-content/uploads/text-data-task-framework-preprocessing.png" alt="Data preprocessing" width="99%" /><br />
+<font size="-1">Preprocessing, in the context of the textual data science framework.</font></center></p>
+<p>Our goal is to go from what we will describe as a chunk of text (not to be confused with text chunking), a lengthy, unprocessed single string, and end up with a list (or several lists) of cleaned tokens that would be useful for further text mining and/or natural language processing tasks.</p>
+<p>First we start with our imports.</p>
+<p><script src="https://gist.github.com/mmmayo13/4c42d7ad13de9c2bdc340750a75db8c1.js"></script></p>
+<p>Beyond the standard Python libraries, we are also using the following:</p>
+<ul>
+<li><a href="http://www.nltk.org/" rel="noopener" target="_blank">NLTK</a> - The Natural Language ToolKit is one of the best-known and most-used NLP libraries in the Python ecosystem, useful for all sorts of tasks from tokenization, to stemming, to part of speech tagging, and beyond
+<li><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" rel="noopener" target="_blank">BeautifulSoup</a> - BeautifulSoup is a useful library for extracting data from HTML and XML documents
+<li><a href="https://pypi.python.org/pypi/inflect" rel="noopener" target="_blank">Inflect</a> - This is a simple library for accomplishing the natural language related tasks of generating plurals, singular nouns, ordinals, and indefinite articles, and (of most interest to us) converting numbers to words
+<li><a href="https://github.com/kootenpv/contractions" rel="noopener" target="_blank">Contractions</a> - Another simple library, solely for expanding contractions
+</ul>
+<p>If you have NLTK installed, yet require the download of its any additional data, <a href="https://www.nltk.org/data.html" rel="noopener" target="_blank">see here</a>.</p>
+<p>We need some sample text. We'll start with something very small and artificial in order to easily see the results of what we are doing step by step.</p>
+<p><script src="https://gist.github.com/mmmayo13/ad2abd5a3527f75540c443f31b46c39d.js"></script></p>
+<p>A toy dataset indeed, but make no mistake; the steps we are taking here to preprocessing this data are fully transferable.</p>
+<p><center><img src="/wp-content/uploads/text-preprocessing-framework-2.png" alt="Preprocessing framework" width="60%" /><br />
+<font size="-1">The text data preprocessing framework.</font></center></p>
+<p>&nbsp;</p>
+<h3>Noise Removal</h3>
+<p>&nbsp;<br />
+Let's loosely define <b>noise removal</b> as text-specific normalization tasks which often take place prior to tokenization. I would argue that, while the other 2 major steps of the preprocessing framework (tokenization and normalization) are basically task-independent, noise removal is much more task-specific.</p>
+<p>Sample noise removal tasks could include:</p>
+<ul>
+<li>removing text file headers, footers
+<li>removing HTML, XML, etc. markup and metadata
+<li>extracting valuable data from other formats, such as JSON
+</ul>
+<p>As you can imagine, the boundary between noise removal and data collection and assembly, on the one hand, is a fuzzy one, while the line between noise removal and normalization is blurred on the other. Given its close relationship with specific texts and their collection and assembly, many denoising tasks, such as parsing a JSON structure, would obviously need to be implemented prior to tokenization.</p>
+<p>In our data preprocessing pipeline, we will strip away HTML markup with the help of the BeautifulSoup library, and use regular expressions to remove open and close double brackets and anything in between them (we assume this is necessary based on our sample text).</p>
+<p><script src="https://gist.github.com/mmmayo13/a14fad3d4a3571bf91552146ea8cea6d.js"></script></p>
+<p>While not mandatory to do at this stage prior to tokenization (you'll find that this statement is the norm for the relatively flexible ordering of text data preprocessing tasks), replacing contractions with their expansions can be beneficial at this point, since our word tokenizer will split words like "didn't" into "did" and "n't." It's not impossible to remedy this tokenization at a later stage, but doing so prior makes it easier and more straightforward.</p>
+<p><script src="https://gist.github.com/mmmayo13/d7458bfab7a2c10bec9a5199f6711d1a.js"></script></p>
+<p>And here is the result of de-noising on our sample text.</p>
+<div style="width:98%;border:1px solid #ccc; overflow:auto; padding-left:10px; padding-bottom:10px; padding-top:10px">
+<pre>Title Goes Here
+Bolded Text
+Italicized Text
+
+But this will still be here!
+
+I run. He ran. She is running. Will they stop running?
+
+I talked. She was talking. They talked to them about running. Who ran to the talking runner?
+
+
+
+¡Sebastián, Nicolás, Alejandro and Jéronimo are going to the store tomorrow morning!
+
+something... is! wrong() with.,; this :: sentence.
+
+I cannot do this anymore. I did not know them. Why could not you have dinner at the restaurant?
+
+My favorite movie franchises, in order: Indiana Jones; Marvel Cinematic Universe; Star Wars; Back to the Future; Harry Potter.
+
+do not do it.... Just do not. Billy! I know what you are doing. This is a great little house you have got here.
+
+
+
+John: "Well, well, well."
+James: "There, there. There, there."
+
+  
+
+There are a lot of reasons not to do this. There are 101 reasons not to do it. 1000000 reasons, actually.
+I have to go get 2 tutus from 2 different stores, too.
+
+22    45   1067   445
+
+{{Here is some stuff inside of double curly braces.}}
+{Here is more stuff in single curly braces.}</pre>
+</div>
+<p><br class="blank" /></p>
+<p>&nbsp;</p>
+<h3>Tokenization</h3>
+<p>&nbsp;<br />
+Tokenization is a step which splits longer strings of text into smaller pieces, or tokens. Larger chunks of text can be tokenized into sentences, sentences can be tokenized into words, etc. Further processing is generally performed after a piece of text has been appropriately tokenized. Tokenization is also referred to as text segmentation or lexical analysis. Sometimes segmentation is used to refer to the breakdown of a large chunk of text into pieces larger than words (e.g. paragraphs or sentences), while tokenization is reserved for the breakdown process which results exclusively in words.</p>
+<p>For our task, we will tokenize our sample text into a list of words. This is done using NTLK's <code>word_tokenize()</code> function.</p>
+<p><script src="https://gist.github.com/mmmayo13/8fe5d0f3f314e22a0364d754f2257678.js"></script></p>
+<p>And here are our word tokens:</p>
+<div style="width:98%;border:1px solid #ccc; overflow:auto; padding-left:10px; padding-bottom:10px; padding-top:10px">
+<pre>['Title', 'Goes', 'Here', 'Bolded', 'Text', 'Italicized', 'Text', 'But', 'this', 'will', 'still',
+'be', 'here', '!', 'I', 'run', '.', 'He', 'ran', '.', 'She', 'is', 'running', '.', 'Will', 'they', 
+'stop', 'running', '?', 'I', 'talked', '.', 'She', 'was', 'talking', '.', 'They', 'talked', 'to', 'them', 
+'about', 'running', '.', 'Who', 'ran', 'to', 'the', 'talking', 'runner', '?', '¡Sebastián', ',', 
+'Nicolás', ',', 'Alejandro', 'and', 'Jéronimo', 'are', 'going', 'tot', 'he', 'store', 'tomorrow', 
+'morning', '!', 'something', '...', 'is', '!', 'wrong', '(', ')', 'with.', ',', ';', 'this', ':', ':', 
+'sentence', '.', 'I', 'can', 'not', 'do', 'this', 'anymore', '.', 'I', 'did', 'not', 'know', 'them', '.', 
+'Why', 'could', 'not', 'you', 'have', 'dinner', 'at', 'the', 'restaurant', '?', 'My', 'favorite', 
+'movie', 'franchises', ',', 'in', 'order', ':', 'Indiana', 'Jones', ';', 'Star', 'Wars', ';', 'Marvel', 
+'Cinematic', 'Universe', ';', 'Back', 'to', 'the', 'Future', ';', 'Harry', 'Potter', '.', 'do', 'not', 
+'do', 'it', '...', '.', 'Just', 'do', 'not', '.', 'Billy', '!', 'I', 'know', 'what', 'you', 'are', 
+'doing', '.', 'This', 'is', 'a', 'great', 'little', 'house', 'you', 'have', 'got', 'here', '.', 'John', 
+':', '``', 'Well', ',', 'well', ',', 'well', '.', "''", 'James', ':', '``', 'There', ',', 'there', '.', 
+'There', ',', 'there', '.', "''", 'There', 'are', 'a', 'lot', 'of', 'reasons', 'not', 'to', 'do', 'this', 
+'.', 'There', 'are', '101', 'reasons', 'not', 'to', 'do', 'it', '.', '1000000', 'reasons', ',', 
+'actually', '.', 'I', 'have', 'to', 'go', 'get', '2', 'tutus', 'from', '2', 'different', 'stores', ',', 
+'too', '.', '22', '45', '1067', '445', '{', '{', 'Here', 'is', 'some', 'stuff', 'inside', 'of', 'double', 
+'curly', 'braces', '.', '}', '}', '{', 'Here', 'is', 'more', 'stuff', 'in', 'single', 'curly', 'braces', 
+'.', '}']</pre>
+</div>
+<p><br class="blank" /></p>
+<p>&nbsp;</p>
+<h3>Normalization</h3>
+<p>&nbsp;<br />
+Normalization generally refers to a series of related tasks meant to put all text on a level playing field: converting all text to the same case (upper or lower), removing punctuation, converting numbers to their word equivalents, and so on. Normalization puts all words on equal footing, and allows processing to proceed uniformly.</p>
+<p>Normalizing text can mean performing a number of tasks, but for our framework we will approach normalization in 3 distinct steps: (1) stemming, (2) lemmatization, and (3) everything else. For specifics on what these distinct steps may be, <a href="/2017/12/general-approach-preprocessing-text-data.html" rel="noopener" target="_blank">see this post</a>.</p>
+<p>Remember, after tokenization, we are no longer working at a text level, but now at a word level. Our normalization functions, shown below, reflect this. Function names and comments should provide the necessary insight into what each does.</p>
+<p><script src="https://gist.github.com/mmmayo13/07252b4eb27e5495b6032888b38e5333.js"></script></p>
+<p>After calling the normalization function:</p>
+<div style="width:98%;border:1px solid #ccc; overflow:auto; padding-left:10px; padding-bottom:10px; padding-top:10px">
+<pre>['title', 'goes', 'bolded', 'text', 'italicized', 'text', 'still', 'run', 'ran', 'running', 'stop', 
+'running', 'talked', 'talking', 'talked', 'running', 'ran', 'talking', 'runner', 'sebastian', 'nicolas', 
+'alejandro', 'jeronimo', 'going', 'store', 'tomorrow', 'morning', 'something', 'wrong', 'sentence', 
+'anymore', 'know', 'could', 'dinner', 'restaurant', 'favorite', 'movie', 'franchises', 'order', 
+'indiana', 'jones', 'marvel', 'cinematic', 'universe', 'star', 'wars', 'back', 'future', 'harry', 
+'potter', 'billy', 'know', 'great', 'little', 'house', 'got', 'john', 'well', 'well', 'well', 'james', 
+'lot', 'reasons', 'one hundred and one', 'reasons', 'one million', 'reasons', 'actually', 'go', 'get', 
+'two', 'tutus', 'two', 'different', 'stores', 'twenty-two', 'forty-five', 'one thousand and sixty-seven', 
+'four hundred and forty-five', 'stuff', 'inside', 'double', 'curly', 'braces', 'stuff', 'single', 
+'curly', 'braces']</pre>
+</div>
+<p><br class="blank" /></p>
+<p>Calling the stemming and lemming functions are done as below:</p>
+<p><script src="https://gist.github.com/mmmayo13/aa19c8fd5f4e85cdbb06ddde15de70e7.js"></script></p>
+<p>This results in a return of 2 new lists: one of stemmed tokens, and another of lemmatized tokens with respect to verbs. Depending on your upcoming NLP task or preference, one of these may be more appropriate than the other. See here for a <a href="https://nlp.stanford.edu/IR-book/html/htmledition/stemming-and-lemmatization-1.html" rel="noopener" target="_blank">discussion on lemmatization vs. stemming</a>.</p>
+<div style="width:98%;border:1px solid #ccc; overflow:auto; padding-left:10px; padding-bottom:10px; padding-top:10px">
+<pre>Stemmed:
+ ['titl', 'goe', 'bold', 'text', 'it', 'text', 'stil', 'run', 'ran', 'run', 'stop', 'run', 'talk', 
+'talk', 'talk', 'run', 'ran', 'talk', 'run', 'sebast', 'nicola', 'alejandro', 'jeronimo', 'going', 
+'stor', 'tomorrow', 'morn', 'someth', 'wrong', 'sent', 'anym', 'know', 'could', 'din', 'resta', 
+'favorit', 'movy', 'franch', 'ord', 'indian', 'jon', 'marvel', 'cinem', 'univers', 'star', 'war', 'back', 
+'fut', 'harry', 'pot', 'bil', 'know', 'gre', 'littl', 'hous', 'got', 'john', 'wel', 'wel', 'wel', 'jam', 
+'lot', 'reason', 'one hundred and on', 'reason', 'one million', 'reason', 'act', 'go', 'get', 'two', 
+'tut', 'two', 'diff', 'stor', 'twenty-two', 'forty-five', 'one thousand and sixty-seven', 'four hundred 
+and forty-five', 'stuff', 'insid', 'doubl', 'cur', 'brac', 'stuff', 'singl', 'cur', 'brac']
+
+Lemmatized:
+ ['title', 'go', 'bolded', 'text', 'italicize', 'text', 'still', 'run', 'run', 'run', 'stop', 'run', 
+'talk', 'talk', 'talk', 'run', 'run', 'talk', 'runner', 'sebastian', 'nicolas', 'alejandro', 'jeronimo', 
+'go', 'store', 'tomorrow', 'morning', 'something', 'wrong', 'sentence', 'anymore', 'know', 'could', 
+'dinner', 'restaurant', 'favorite', 'movie', 'franchise', 'order', 'indiana', 'jones', 'marvel', 
+'cinematic', 'universe', 'star', 'war', 'back', 'future', 'harry', 'potter', 'billy', 'know', 'great', 
+'little', 'house', 'get', 'john', 'well', 'well', 'well', 'jam', 'lot', 'reason', 'one hundred and one', 
+'reason', 'one million', 'reason', 'actually', 'go', 'get', 'two', 'tutus', 'two', 'different', 'store', 
+'twenty-two', 'forty-five', 'one thousand and sixty-seven', 'four hundred and forty-five', 'stuff', 
+'inside', 'double', 'curly', 'brace', 'stuff', 'single', 'curly', 'brace']
+</pre>
+</div>
+<p><br class="blank" /></p>
+<p>And there you have a walkthrough of a simple text data preprocessing process using Python on a sample piece of text. I would encourage you to perform these tasks on some additional texts to verify the results. We will use this same process to clean the text data for our next task, in which we will undertake some actual NLP task, as opposed to spending time preparing our data for such an actual task.</p>
+<p>&nbsp;<br />
+<b>Related</b>:</p>
+<ul class="three_ul">
+<li><a href="/2017/12/general-approach-preprocessing-text-data.html">A General Approach to Preprocessing Text Data</a>
+<li><a href="/2017/11/framework-approaching-textual-data-tasks.html">A Framework for Approaching Textual Data Science Tasks</a>
+<li><a href="/2017/02/natural-language-processing-key-terms-explained.html">Natural Language Processing Key Terms, Explained</a>
+</ul>
+<p><a name="comments"></a></p>
+<div id="disqus_thread"></div>
+<p> <script type="text/javascript">
+ var disqus_shortname = 'kdnuggets';
+ (function() { var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true; dsq.src = 'https://kdnuggets.disqus.com/embed.js';
+ (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq); })();
+ </script></p>
+  </div>
+
+
+<div class="page-link"></div>
+
+  <div class="pagi">
+  <hr class="grey-line">
+
+<div class="pagi-left">
+<a href="https://www.kdnuggets.com/2018/03/new-poll-where-applied-analytics-data-science.html" rel="prev"><img width=8 height=10 src='/images/prv.gif' /> <strong>Previous post</strong></a></div>
+<div  class="pagi-right">
+<a href="https://www.kdnuggets.com/2018/03/deep-learning-frameworks.html" rel="next"><strong>Next post</strong> <img width=8 height=10 src="/images/nxt.gif"/></a></div>
+
+<br><br>
+<div>
+<hr class="grey-line"><br>
+<h2>Top Stories Past 30 Days</h2>
+<table class="latn" align=center cellpadding="3" cellspacing="10" width="100%">
+  <tr>
+    <td valign="top" width="50%">
+      <table cellpadding="3" cellspacing="2">
+        <tr><th><b>Most Popular</b></th></tr>
+        <tr><td>
+          <ol class="three_ol"><li> <a href="/2018/12/why-shouldnt-data-science-generalist.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-mp-1-generalist']);"><b>Why You Shouldn't be a Data Science Generalist</b></a>
+<li> <a href="/2018/12/common-mistakes-data-science.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-mp-2-mistakes']);"><b>Common mistakes when carrying out machine learning and data science</b></a>
+<li> <a href="/2018/05/simplilearn-9-must-have-skills-data-scientist.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-mp-3-9-simplilearn-9']);"><b>9 Must-have skills you need to become a Data Scientist, updated</b></a>
+<li> <a href="/2018/12/most-popular-python-ide-editor.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-mp-4-popular-ides']);"><b>Here are the most popular Python IDEs / Editors</b></a>
+<li> <a href="/2018/12/learning-machine-learning-data-science.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-mp-5-learn-mlvsds']);"><b>Learning Machine Learning vs Learning Data Science</b></a>
+<li> <a href="/2018/12/machine-learning-project-checklist.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-mp-6-ml-proj-checklist']);"><b>The Machine Learning Project Checklist</b></a>
+<li> <a href="/2018/11/best-python-ide-data-science.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-mp-7-best-ide']);"><b>What is the Best Python IDE for Data Science?</b></a>
+         </ol>
+        </td></tr>
+      </table>
+    </td>	<td valign="top">
+      <table cellpadding="3" cellspacing="2">
+        <tr><th><b>Most Shared</b></th></tr>
+        <tr><td><ol class="three_ol">
+<li> <a href="/2018/12/why-shouldnt-data-science-generalist.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-ms-1-generalist']);"><b>Why You Shouldn't be a Data Science Generalist</b></a>
+<li> <a href="/2018/11/deep-learning-cheat-sheets.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-ms-2-dl-cheat']);"><b>Deep Learning Cheat Sheets</b></a>
+<li> <a href="/2018/12/predictions-machine-learning-ai-2019.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-ms-3-ml-ai-main-devs']);"><b>Machine Learning &#038; AI Main Developments in 2018 and Key Trends for 2019</b></a>
+<li> <a href="/2018/12/predictions-data-science-analytics-2019.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-ms-4-ds-analytics-man-devs']);"><b>AI, Data Science, Analytics Main Developments in 2018 and Key Trends for 2019</b></a>
+<li> <a href="/2018/12/10-more-free-must-see-courses-machine-learning-data-science.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-ms-5-10-more-must-see']);"><b>10 More Must-See Free Courses for Machine Learning and Data Science</b></a>
+<li> <a href="/2018/12/learning-machine-learning-data-science.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-ms-6-learn-mlvsds']);"><b>Learning Machine Learning vs Learning Data Science</b></a>
+<li> <a href="/2018/11/simplilearn-complete-guide-machine-learning-course.html" onclick="_gaq.push(['_trackPageview','/x/pbc/2018/12-24-ms-7-best-ml-course']);"><b>A Complete Guide to Choosing the Best Machine Learning Course</b></a>
+          </ol>
+        </td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</div>
+  </div>
+  <!--#content end--></div>
+
+<div id="sidebar">
+  <div class="latn">
+      <h3><b><a href="/news/index.html">Latest News</a></b></h3>
+      <ul style="font-size:14px; margin-top:5px">
+<li> <a href="https://www.kdnuggets.com/2019/01/backpropagation-algorithm-demystified.html">The Backpropagation Algorithm Demystified</a><li> <a href="https://www.kdnuggets.com/2019/01/top-tweets-dec19-jan01.html">Top tweets, Dec 19 &#8211; Jan 1: Deep Learning Cheat...</a><li> <a href="https://www.kdnuggets.com/2019/01/more-google-colab-environment-management-tips.html">3 More Google Colab Environment Management Tips</a><li> <a href="https://www.kdnuggets.com/2018/12/feature-building-techniques-tricks-kaggle.html">Good Feature Building Techniques and Tricks for Kaggle</a><li> <a href="https://www.kdnuggets.com/2018/12/papers-with-code-fantastic-github-resource-machine-learning.html">Papers with Code: A Fantastic GitHub Resource for Machi...</a><li> <a href="https://www.kdnuggets.com/jobs/18/12-31-curt-massachusetts-general-hospital-post-doctoral-scholar.html">Center for Ultrasound Research and Translation, Massach...</a></ul>
+
+              
+  </div>
+  <div>
+    <script type="text/javascript">kda_sid_write(kda_sid_n);</script>
+  </div>
+  <br><script type="text/javascript" src="/aps/sbm.js"></script>       
+  <div class="latn" style="margin-top: 15px;">
+      <h3><b>More Recent Stories</b></h3>
+      <ul class="next-posts">
+<li> <a href="https://www.kdnuggets.com/jobs/18/12-31-curt-massachusetts-general-hospital-post-doctoral-scholar.html">Center for Ultrasound Research and Translation, Massachusetts ...</a><li> <a href="https://www.kdnuggets.com/2018/12/activewizards-comparison-speech-processing-apis.html">Comparison of the Top Speech Processing APIs</a><li> <a href="https://www.kdnuggets.com/2018/12/manning-countdown-2019-big-deals-ai-data-science-machine-learning-books-videos.html">Manning Countdown to 2019 &#8211; Big Deals on AI, Data Scienc...</a><li> <a href="https://www.kdnuggets.com/2018/12/supervised-learning-model-popularity-from-past-present.html">Supervised Learning: Model Popularity from Past to Present</a><li> <a href="https://www.kdnuggets.com/2018/12/essence-machine-learning.html">The Essence of Machine Learning</a><li> <a href="https://www.kdnuggets.com/2018/12/rework-worlds-biggest-deep-learning-summit-san-francisco.html">World&#8217;s Biggest Deep Learning Summit 3 weeks away</a><li> <a href="https://www.kdnuggets.com/2018/12/who-is-data-scientist.html">Who is a Data Scientist?</a><li> <a href="https://www.kdnuggets.com/2018/12/explainable-ai-machine-learning.html">A Case For Explainable AI &#038; Machine Learning</a><li> <a href="https://www.kdnuggets.com/2018/12/economics-value-curve-drive-digital-transformation.html">Using the Economics Value Curve to Drive Digital Transformation</a><li> <a href="https://www.kdnuggets.com/2018/12/synthetic-data-generation-must-have-skill.html">Synthetic Data Generation: A must-have skill for new data scie...</a><li> <a href="https://www.kdnuggets.com/2018/12/deep-learning-satellite-imagery.html">Deep learning in Satellite imagery</a><li> <a href="https://www.kdnuggets.com/jobs/18/12-26-miami-university-assistant-provost-institutional-research.html">Miami University: Assistant Provost for Institutional Research...</a><li> <a href="https://www.kdnuggets.com/2018/12/bert-sota-nlp-model-explained.html">BERT: State of the Art NLP Model, Explained</a><li> <a href="https://www.kdnuggets.com/2018/12/interspeech-2018-highlights-data-scientists.html">Interspeech 2018: Highlights for Data Scientists</a><li> <a href="https://www.kdnuggets.com/jobs/18/12-24-university-of-virginia-faculty-open-rank-model-simulation.html">University of Virginia: Open Rank Model and Simulation at the ...</a><li> <a href="https://www.kdnuggets.com/2018/12/twas-night-before-analysis.html">Twas the Night Before Analysis or A Visit from the Chief Data ...</a><li> <a href="https://www.kdnuggets.com/2018/12/top-news-week-1217-1223.html">Top Stories, Dec 17-23: Why You Shouldn&#8217;t be a Data Scie...</a><li> <a href="https://www.kdnuggets.com/2018/12/guide-decision-trees-machine-learning-data-science.html">A Guide to Decision Trees for Machine Learning and Data Science</a><li> <a href="https://www.kdnuggets.com/2018/12/feature-engineering-explained.html">Feature engineering, Explained</a><li> <a href="https://www.kdnuggets.com/2018/12/six-steps-master-machine-learning-data-preparation.html">Six Steps to Master Machine Learning with Data Preparation</a></ul>
+
+  </div>       
+</div><div class="breadcrumbs_bottom">
+    <div class="breadcumb">
+       <br />
+<a href="/">KDnuggets Home</a> &raquo; <a href="/news/index.html">News</a> &raquo; <a href="/2018/index.html">2018</a> &raquo; <a href="https://www.kdnuggets.com/2018/03/index.html">Mar</a> &raquo; <a href="https://www.kdnuggets.com/2018/03/tutorials.html">Tutorials, Overviews</a> &raquo; Text Data Preprocessing: A Walkthrough in Python (&nbsp;<a href="/2018/n13.html">18:n13</a>&nbsp;)    </div>
+</div>
+<!--#content_wrapper end--></div>
+<br/>
+  <div id="footer">
+  <br>&copy; 2019 KDnuggets. <a href="/about/index.html">About KDnuggets</a>. &nbsp;<a href="/news/privacy-policy.html">Privacy policy</a>. <a href="/terms-of-service.html">Terms of Service</a><br>&nbsp;
+<div class="kd_bottom">
+  <div class="footer-container">
+    <div class="footer-news">
+		<a href="/news/subscribe.html" target="_blank" onclick="_gaq.push(['_trackPageview','/x/bot/sub']);" ><b>Subscribe to KDnuggets News</b></a> 
+    </div>
+    <div class="footer-sm">
+      <a href="https://twitter.com/kdnuggets" target="_blank" onclick="_gaq.push(['_trackPageview','/x/bot/twt']);"><img src="/images/tw_c48.png" width=32 height=32></a> 
+      <a href="https://facebook.com/kdnuggets" target="_blank" onclick="_gaq.push(['_trackPageview','/x/bot/fb']);"><img src="/images/fb_c48.png" alt="Facebook" width=32 height=32></a>
+      <a href="https://www.linkedin.com/groups/54257" target="_blank"  onclick="_gaq.push(['_trackPageview','/x/bot/in']);"><img src="/images/in_c48.png" alt="LinkedIn" width=32 height=32></a>
+    </div>
+  </div>
+  <div class="close-footer">X</div>
+</div>
+<script type="text/javascript">
+  jQuery('.close-footer').click(
+      function(){       
+         jQuery('.kd_bottom').hide();
+      }
+   );
+</script>  </div>
+  <div class="clear"><!--blank--></div>
+</div>
+<div style="display: none;"><div id="boxzilla-box-82996-content"><script type="text/javascript">(function() {
+	if (!window.mc4wp) {
+		window.mc4wp = {
+			listeners: [],
+			forms    : {
+				on: function (event, callback) {
+					window.mc4wp.listeners.push({
+						event   : event,
+						callback: callback
+					});
+				}
+			}
+		}
+	}
+})();
+</script><!-- MailChimp for WordPress v4.1.14 - https://wordpress.org/plugins/mailchimp-for-wp/ --><form id="mc4wp-form-1" class="mc4wp-form mc4wp-form-77281" method="post" data-id="77281" data-name="Subscribe to KDnuggets News" ><div class="mc4wp-form-fields"><div class="header-container">
+  <img src="/wp-content/uploads/envelope.png" align="left"/><a href="/news/subscribe.html">Get KDnuggets, a leading newsletter on AI, 
+  Data Science, and Machine Learning</a> 
+</div>  
+<div class="form-fields">
+  <div class="field-container"><label>Email:</label><input type="email" name="EMAIL" size="30" maxlength="60" placeholder="Your email" required /></div>
+  <div class="field-container submit-container"><div class="form-button" onclick="document.getElementById('mc4wp-form-1').submit()">Sign Up</div></div>
+</div>  
+
+<label style="display: none !important;">Leave this field empty if you're human: <input type="text" name="_mc4wp_honeypot" value="" tabindex="-1" autocomplete="off" /></label><input type="hidden" name="_mc4wp_timestamp" value="1546474131" /><input type="hidden" name="_mc4wp_form_id" value="77281" /><input type="hidden" name="_mc4wp_form_element_id" value="mc4wp-form-1" /></div><div class="mc4wp-response"></div></form><!-- / MailChimp for WordPress Plugin -->
+</div></div><script type="text/javascript">(function() {function addEventListener(element,event,handler) {
+	if(element.addEventListener) {
+		element.addEventListener(event,handler, false);
+	} else if(element.attachEvent){
+		element.attachEvent('on'+event,handler);
+	}
+}function maybePrefixUrlField() {
+	if(this.value.trim() !== '' && this.value.indexOf('http') !== 0) {
+		this.value = "http://" + this.value;
+	}
+}
+
+var urlFields = document.querySelectorAll('.mc4wp-form input[type="url"]');
+if( urlFields && urlFields.length > 0 ) {
+	for( var j=0; j < urlFields.length; j++ ) {
+		addEventListener(urlFields[j],'blur',maybePrefixUrlField);
+	}
+}/* test if browser supports date fields */
+var testInput = document.createElement('input');
+testInput.setAttribute('type', 'date');
+if( testInput.type !== 'date') {
+
+	/* add placeholder & pattern to all date fields */
+	var dateFields = document.querySelectorAll('.mc4wp-form input[type="date"]');
+	for(var i=0; i<dateFields.length; i++) {
+		if(!dateFields[i].placeholder) {
+			dateFields[i].placeholder = 'YYYY-MM-DD';
+		}
+		if(!dateFields[i].pattern) {
+			dateFields[i].pattern = '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])';
+		}
+	}
+}
+
+})();</script><script type='text/javascript'>
+/* <![CDATA[ */
+var boxzilla_options = {"testMode":"","boxes":[{"id":82996,"icon":"&times;","content":"","css":{"background_color":"#eeee22","width":600,"border_width":2,"border_style":"double","position":"bottom-left"},"trigger":{"method":"time_on_page","value":"3"},"animation":"slide","cookie":{"triggered":0,"dismissed":336},"rehide":true,"position":"bottom-left","screenWidthCondition":{"condition":"larger","value":500},"closable":true,"post":{"id":82996,"title":"Subscribe to KDnuggets","slug":"subscribe-to-kdnuggets"}}]};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.kdnuggets.com/wp-content/plugins/boxzilla/assets/js/script.min.js?ver=3.2.5'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var boxzilla_stats_config = {"ajaxurl":"https:\/\/www.kdnuggets.com\/wp-admin\/admin-ajax.php?action=boxzilla_stats_track"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.kdnuggets.com/wp-content/plugins/boxzilla-stats/assets/js/tracking.min.js?ver=1.0.4'></script>
+<script type='text/javascript' src='https://www.kdnuggets.com/wp-includes/js/wp-embed.min.js?ver=4.9.9'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var mc4wp_forms_config = [];
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://www.kdnuggets.com/wp-content/plugins/mailchimp-for-wp/assets/js/forms-api.min.js?ver=4.1.14'></script>
+<!--[if lte IE 9]>
+<script type='text/javascript' src='https://www.kdnuggets.com/wp-content/plugins/mailchimp-for-wp/assets/js/third-party/placeholders.min.js?ver=4.1.14'></script>
+<![endif]-->
+<!--/.main_wrapper--></div>
+<script type="text/javascript" src="https://s7.addthis.com/js/300/addthis_widget.js#pubid=gpsaddthis"></script>
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.764 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2019-01-02 19:08:51 -->
+
+<!-- Compression = gzip -->
